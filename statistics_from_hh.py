@@ -27,16 +27,16 @@ def predict_rub_salary_for_hh(language):
         response = requests.get(url, params=payload)
         response.raise_for_status()
         salaries = []
-        for item in response.json()['items']:
-            if item['salary'] is None or item['salary']['currency'] != 'RUR':
+        for vacancy in response.json()['items']:
+            if not vacancy['salary'] or vacancy['salary']['currency'] != 'RUR':
                 salaries.append(None)
             else:
-                if item['salary']['from'] is None:
-                    salaries.append(item['salary']['to'] * 0.8)
-                elif item['salary']['to'] is None:
-                    salaries.append(item['salary']['from'] * 1.2)
+                if not vacancy['salary']['from']:
+                    salaries.append(vacancy['salary']['to'] * 0.8)
+                elif not vacancy['salary']['to']:
+                    salaries.append(vacancy['salary']['from'] * 1.2)
                 else:
-                    salaries.append((item['salary']['from'] + item['salary']['to']) / 2)
+                    salaries.append((vacancy['salary']['from'] + vacancy['salary']['to']) / 2)
         all_salaries += salaries
         pages_number = response.json()['pages']
         page += 1
@@ -44,7 +44,6 @@ def predict_rub_salary_for_hh(language):
 
 
 def get_job_statistics_from_hh(languages):
-    languages = languages
     all_result = {}
 
     for language in languages:
