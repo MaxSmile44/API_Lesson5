@@ -4,13 +4,26 @@ from statistics import mean
 import requests
 
 
+PROGRAMMER_ROLE_NUMBER = '96'
+MOSCOW_AREA_NUMBER = '1'
+COUNT_DAYS_OF_PERIOD = '30'
+COUNT_VACANCIES_IN_PAGE = 100
+
+
 def predict_rub_salary_for_hh(language):
     url = 'https://api.hh.ru/vacancies'
     page = 0
     pages_number = 1
     all_salaries = []
     while page < pages_number:
-        payload = {'professional_role': '96', 'area': '1', 'period': '30', 'text': language, 'page': page, 'per_page': 100}
+        payload = {
+            'professional_role': PROGRAMMER_ROLE_NUMBER,
+            'area': MOSCOW_AREA_NUMBER,
+            'period': COUNT_DAYS_OF_PERIOD,
+            'text': language,
+            'page': page,
+            'per_page': COUNT_VACANCIES_IN_PAGE
+        }
         response = requests.get(url, params=payload)
         response.raise_for_status()
         salaries = []
@@ -29,6 +42,7 @@ def predict_rub_salary_for_hh(language):
         page += 1
     return all_salaries
 
+
 def get_job_statistics_from_hh(languages):
     languages = languages
     all_result = {}
@@ -45,9 +59,11 @@ def get_job_statistics_from_hh(languages):
         all_result[language] = language_result
     return all_result
 
+
 def main():
     languages = ['JavaScript', 'Java', 'Python', 'Ruby', 'PHP', 'C++', 'C#', 'C', 'Go', 'Swift']
     pprint(get_job_statistics_from_hh(languages), sort_dicts=False)
+
 
 if __name__ == '__main__':
     main()

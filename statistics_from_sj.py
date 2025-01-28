@@ -6,13 +6,30 @@ import requests
 from dotenv import load_dotenv
 
 
+BLOCK_NUMBER_FOR_POSITION = 1
+BLOCK_NUMBER_FOR_LANGUAGE = 10
+MOSCOW_AREA_NUMBER = 4
+PUBLICATION_PERIOD_FOR_ALL_TIME = 0
+COUNT_VACANCIES_IN_PAGE = 100
+
+
 def predict_rub_salary_for_sj(language, sj_key):
     url = 'https://api.superjob.ru/2.0/vacancies/'
     page = 0
     all_salaries = []
     while True:
         headers = {'X-Api-App-Id': sj_key}
-        params = {'keywords': [[1, 10], ['and', 'and'], ['Программист', language]], 'town': 4, 'period': 0, 'count': 100, 'page': page}
+        params = {
+            'keywords': [
+                [BLOCK_NUMBER_FOR_POSITION, BLOCK_NUMBER_FOR_LANGUAGE],
+                ['and', 'and'],
+                ['Программист', language]
+            ],
+            'town': MOSCOW_AREA_NUMBER,
+            'period': PUBLICATION_PERIOD_FOR_ALL_TIME,
+            'count': COUNT_VACANCIES_IN_PAGE,
+            'page': page
+        }
         response = requests.get(url, headers=headers, params=params)
         response.raise_for_status()
         salaries = []
@@ -33,6 +50,7 @@ def predict_rub_salary_for_sj(language, sj_key):
             break
     return all_salaries
 
+
 def get_job_statistics_from_sj(languages, sj_key):
     all_result = {}
 
@@ -48,11 +66,13 @@ def get_job_statistics_from_sj(languages, sj_key):
         all_result[language] = language_result
     return all_result
 
+
 def main():
     load_dotenv()
     sj_key = os.getenv('SJ_KEY')
     languages = ['JavaScript', 'Java', 'Python', 'Ruby', 'PHP', 'C++', 'C#', 'C', 'Go', 'Swift']
     pprint(get_job_statistics_from_sj(languages, sj_key), sort_dicts=False)
+
 
 if __name__ == '__main__':
     main()

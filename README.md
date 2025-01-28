@@ -22,8 +22,6 @@ python main.py
 #### statistics_from_sj.py
 Собирает статистику зарплат вакансий программистов по популярным языкам программирования в Москве с сайта SuperJob. 
 
-API SuperJob позволяют собирать только 500 записей (например 5 страниц по 100 записей).
-
 Данные хранятся в словаре. Пример словаря: 
 
 {'JavaScript': {'vacancies_found': 8, 'vacancies_processed': 3, 'average_salary': 128666}, 'Java': {'vacancies_found': 5, 'vacancies_processed': 3, 'average_salary': 50666}} 
