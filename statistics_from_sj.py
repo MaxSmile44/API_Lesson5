@@ -38,12 +38,16 @@ def predict_rub_salary_for_sj(language, sj_key):
         if response.json()['objects']:
             for vacancy in response.json()['objects']:
                 if vacancy['payment_from'] or vacancy['payment_to']:
-                    salaries.append(counting_salary(vacancy['payment_from'], vacancy['payment_to']))
+                    salaries.append(
+                        counting_salary(vacancy['payment_from'],
+                                        vacancy['payment_to'])
+                    )
             all_salaries += salaries
             page += 1
         else:
             break
-    return all_salaries, response.json()['total']
+    count_salaries = response.json()['total']
+    return all_salaries, count_salaries
 
 
 def get_job_statistics_from_sj(languages, sj_key):
@@ -62,7 +66,18 @@ def get_job_statistics_from_sj(languages, sj_key):
 def main():
     load_dotenv()
     sj_key = os.getenv('SJ_KEY')
-    languages = ['JavaScript', 'Java', 'Python', 'Ruby', 'PHP', 'C++', 'C#', 'C', 'Go', 'Swift']
+    languages = [
+        'JavaScript',
+        'Java',
+        'Python',
+        'Ruby',
+        'PHP',
+        'C++',
+        'C#',
+        'C',
+        'Go',
+        'Swift'
+    ]
     pprint(get_job_statistics_from_sj(languages, sj_key), sort_dicts=False)
 
 
