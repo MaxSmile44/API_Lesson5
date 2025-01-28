@@ -37,26 +37,21 @@ def predict_rub_salary_for_sj(language, sj_key):
         salaries = []
         if response.json()['objects']:
             for vacancy in response.json()['objects']:
-                if not vacancy['payment_from'] and not vacancy['payment_to']:
-                    salaries.append(None)
-                else:
+                if vacancy['payment_from'] or vacancy['payment_to']:
                     salaries.append(counting_salary(vacancy['payment_from'], vacancy['payment_to']))
             all_salaries += salaries
             page += 1
         else:
             break
-    return all_salaries
+    return all_salaries, response.json()['total']
 
 
 def get_job_statistics_from_sj(languages, sj_key):
     all_result = {}
-
     for language in languages:
-        all_salaries = predict_rub_salary_for_sj(language, sj_key)
-        salaries = [i for i in all_salaries if i is not None]
-
+        salaries, count_salaries = predict_rub_salary_for_sj(language, sj_key)
         language_result = {
-            'vacancies_found': len(all_salaries),
+            'vacancies_found': count_salaries,
             'vacancies_processed': len(salaries),
             'average_salary': int(mean(salaries)) if salaries else 0
         }
