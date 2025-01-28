@@ -5,6 +5,8 @@ from statistics import mean
 import requests
 from dotenv import load_dotenv
 
+from salary_value import counting_salary
+
 
 BLOCK_NUMBER_FOR_POSITION = 1
 BLOCK_NUMBER_FOR_LANGUAGE = 10
@@ -38,12 +40,7 @@ def predict_rub_salary_for_sj(language, sj_key):
                 if not vacancy['payment_from'] and not vacancy['payment_to']:
                     salaries.append(None)
                 else:
-                    if not vacancy['payment_from']:
-                        salaries.append(vacancy['payment_to'] * 0.8)
-                    elif not vacancy['payment_to']:
-                        salaries.append(vacancy['payment_from'] * 1.2)
-                    else:
-                        salaries.append((vacancy['payment_from'] + vacancy['payment_to']) / 2)
+                    salaries.append(counting_salary(vacancy['payment_from'], vacancy['payment_to']))
             all_salaries += salaries
             page += 1
         else:

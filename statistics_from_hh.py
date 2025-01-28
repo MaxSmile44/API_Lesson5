@@ -3,6 +3,8 @@ from statistics import mean
 
 import requests
 
+from salary_value import counting_salary
+
 
 PROGRAMMER_ROLE_NUMBER = '96'
 MOSCOW_AREA_NUMBER = '1'
@@ -31,12 +33,7 @@ def predict_rub_salary_for_hh(language):
             if not vacancy['salary'] or vacancy['salary']['currency'] != 'RUR':
                 salaries.append(None)
             else:
-                if not vacancy['salary']['from']:
-                    salaries.append(vacancy['salary']['to'] * 0.8)
-                elif not vacancy['salary']['to']:
-                    salaries.append(vacancy['salary']['from'] * 1.2)
-                else:
-                    salaries.append((vacancy['salary']['from'] + vacancy['salary']['to']) / 2)
+                salaries.append(counting_salary(vacancy['salary']['from'], vacancy['salary']['to']))
         all_salaries += salaries
         pages_number = response.json()['pages']
         page += 1
