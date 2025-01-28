@@ -1,37 +1,39 @@
-from pprint import pprint
-import requests
 import os
+from pprint import pprint
 from statistics import mean
+
+import requests
 from dotenv import load_dotenv
 
 
 def predict_rub_salary_for_sj(language, sj_key):
     url = 'https://api.superjob.ru/2.0/vacancies/'
     page = 0
-    pages_number = 5
     all_salaries = []
-    while page < pages_number:
+    while True:
         headers = {'X-Api-App-Id': sj_key}
         params = {'keywords': [[1, 10], ['and', 'and'], ['Программист', language]], 'town': 4, 'period': 0, 'count': 100, 'page': page}
         response = requests.get(url, headers=headers, params=params)
         response.raise_for_status()
         salaries = []
-        for item in response.json()['objects']:
-            if item['payment_from'] == 0 and item['payment_to'] == 0:
-                salaries.append(None)
-            else:
-                if item['payment_from'] == 0:
-                    salaries.append(item['payment_to'] * 0.8)
-                elif item['payment_to'] == 0:
-                    salaries.append(item['payment_from'] * 1.2)
+        if response.json()['objects']:
+            for item in response.json()['objects']:
+                if item['payment_from'] == 0 and item['payment_to'] == 0:
+                    salaries.append(None)
                 else:
-                    salaries.append((item['payment_from'] + item['payment_to']) / 2)
-        all_salaries += salaries
-        page += 1
+                    if item['payment_from'] == 0:
+                        salaries.append(item['payment_to'] * 0.8)
+                    elif item['payment_to'] == 0:
+                        salaries.append(item['payment_from'] * 1.2)
+                    else:
+                        salaries.append((item['payment_from'] + item['payment_to']) / 2)
+            all_salaries += salaries
+            page += 1
+        else:
+            break
     return all_salaries
 
 def get_job_statistics_from_sj(languages, sj_key):
-    languages = languages
     all_result = {}
 
     for language in languages:

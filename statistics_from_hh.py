@@ -1,6 +1,7 @@
 from pprint import pprint
-import requests
 from statistics import mean
+
+import requests
 
 
 def predict_rub_salary_for_hh(language):
