@@ -25,7 +25,7 @@ def get_table(title, statistics):
         table_data.append(row.copy())
         row = []
     table = AsciiTable(table_data, title)
-    print(table.table)
+    return table.table
 
 
 def main():
@@ -45,8 +45,8 @@ def main():
     ]
     sj_statistics = get_job_statistics_from_sj(languages, sj_key)
     hh_statistics = get_job_statistics_from_hh(languages)
-    get_table('SuperJob Moscow', sj_statistics)
-    get_table('HeadHunter Moscow', hh_statistics)
+    print(get_table('SuperJob Moscow', sj_statistics))
+    print(get_table('HeadHunter Moscow', hh_statistics))
 
 
 if __name__ == '__main__':
