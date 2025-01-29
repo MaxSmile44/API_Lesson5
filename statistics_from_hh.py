@@ -28,8 +28,9 @@ def predict_rub_salary_for_hh(language):
         }
         response = requests.get(url, params=payload)
         response.raise_for_status()
+        vacancies = response.json()
         salaries = []
-        for vacancy in response.json()['items']:
+        for vacancy in vacancies['items']:
             if vacancy['salary'] and vacancy['salary']['currency'] == 'RUR':
                 salaries.append(
                     counting_salary(vacancy['salary']['from'],
@@ -37,9 +38,9 @@ def predict_rub_salary_for_hh(language):
                 )
         all_salaries += salaries
         if not page:
-            pages_number = response.json()['pages']
+            pages_number = vacancies['pages']
         page += 1
-    count_salaries = int(response.json()['found'])
+    count_salaries = int(vacancies['found'])
     return all_salaries, count_salaries
 
 
