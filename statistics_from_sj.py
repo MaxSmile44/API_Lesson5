@@ -34,9 +34,10 @@ def predict_rub_salary_for_sj(language, sj_key):
         }
         response = requests.get(url, headers=headers, params=params)
         response.raise_for_status()
+        vacancies = response.json()
         salaries = []
-        if response.json()['objects']:
-            for vacancy in response.json()['objects']:
+        if vacancies['objects']:
+            for vacancy in vacancies['objects']:
                 if vacancy['payment_from'] or vacancy['payment_to']:
                     salaries.append(
                         counting_salary(vacancy['payment_from'],
@@ -46,7 +47,7 @@ def predict_rub_salary_for_sj(language, sj_key):
             page += 1
         else:
             break
-    count_salaries = response.json()['total']
+    count_salaries = vacancies['total']
     return all_salaries, count_salaries
 
 
