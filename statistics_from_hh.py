@@ -40,8 +40,8 @@ def predict_rub_salary_for_hh(language):
         if not page:
             pages_number = vacancies['pages']
         page += 1
-    count_salaries = int(vacancies['found'])
-    return all_salaries, count_salaries
+    salaries_count = int(vacancies['found'])
+    return all_salaries, salaries_count
 
 
 def get_job_statistics_from_hh(languages):

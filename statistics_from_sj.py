@@ -47,8 +47,8 @@ def predict_rub_salary_for_sj(language, sj_key):
             page += 1
         else:
             break
-    count_salaries = vacancies['total']
-    return all_salaries, count_salaries
+    salaries_count = vacancies['total']
+    return all_salaries, salaries_count
 
 
 def get_job_statistics_from_sj(languages, sj_key):
