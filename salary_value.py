@@ -1,4 +1,4 @@
-def counting_salary(salary_from, salary_to):
+def get_salary_value(salary_from, salary_to):
     if not salary_from:
         return salary_to * 0.8
     elif not salary_to:

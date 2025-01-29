@@ -3,7 +3,7 @@ from statistics import mean
 
 import requests
 
-from salary_value import counting_salary
+from salary_value import get_salary_value
 
 
 PROGRAMMER_ROLE_NUMBER = '96'
@@ -33,7 +33,7 @@ def predict_rub_salary_for_hh(language):
         for vacancy in vacancies['items']:
             if vacancy['salary'] and vacancy['salary']['currency'] == 'RUR':
                 salaries.append(
-                    counting_salary(vacancy['salary']['from'],
+                    get_salary_value(vacancy['salary']['from'],
                                     vacancy['salary']['to'])
                 )
         all_salaries += salaries

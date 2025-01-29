@@ -5,7 +5,7 @@ from statistics import mean
 import requests
 from dotenv import load_dotenv
 
-from salary_value import counting_salary
+from salary_value import get_salary_value
 
 
 BLOCK_NUMBER_FOR_POSITION = 1
@@ -40,7 +40,7 @@ def predict_rub_salary_for_sj(language, sj_key):
             for vacancy in vacancies['objects']:
                 if vacancy['payment_from'] or vacancy['payment_to']:
                     salaries.append(
-                        counting_salary(vacancy['payment_from'],
+                        get_salary_value(vacancy['payment_from'],
                                         vacancy['payment_to'])
                     )
             all_salaries += salaries
